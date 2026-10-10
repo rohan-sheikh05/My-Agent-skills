@@ -37,7 +37,7 @@ For Claude, download the `.zip`. For any other AI, download `SKILL.md`.
 
 ### 2a. Claude (claude.ai)
 
-1. Open **Settings → Capabilities** (on some accounts it's **Customize**) and turn on **Code execution and file creation**.
+1. Open a chat and to go to **Customize** in the left panel.
 2. Find **Skills** → **Upload skill** → choose `term-final-question-bank.zip`.
 3. Make sure the skill is switched **on**.
 4. Start a new chat, attach the question papers and say:
@@ -53,13 +53,12 @@ Claude picks up the skill on its own. No need to paste anything.
 3. In the project **Instructions**, write: *"Follow SKILL.md exactly whenever I share exam papers."*
 4. Start a chat inside the project and attach the papers.
 
-**Option B: Custom GPT**
-**Explore GPTs → Create → Configure**, upload `SKILL.md` under **Knowledge**, and put the same line in **Instructions**.
+**Option B: if you have premium subscription**
+**Plugin → skills → add new skill**, upload `SKILL.md` under **Knowledge**, and put the same line in **Instructions**.
 
 ### 2c. Gemini / other AIs
 
-- **Gemini:** create a **Gem**, add `SKILL.md` as a file, and tell it to follow the file.
-- **Anything else:** paste the full text of `SKILL.md` as your first message, then attach the papers.
+- Just upload the skill.md file and your document and ask it to follow the skills instruction. 
 
 ### 3. Get your file
 
