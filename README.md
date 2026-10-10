@@ -32,7 +32,7 @@ Give the AI the question papers (PDFs or photos) for one course. You get back on
 
 ### 1. Download
 
-On this repo page, click the file → **Download raw file** (↓ icon).
+On this repo page, click the green <> code button → **Download zip** 
 For Claude, download the `.zip`. For any other AI, download `SKILL.md`.
 
 ### 2a. Claude (claude.ai)
