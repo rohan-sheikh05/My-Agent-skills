@@ -31,14 +31,20 @@ Offer options when you can guess likely answers, so the user can just tap one.
     Supabase free, Cloudflare free)?
 11. **Data sensitivity:** health, money, children, location? (This affects backend
     choice, privacy policy and the store's data safety form.)
-12. **Timeline and the first release target:** a sideloaded APK for friends, closed
-    testing, or the public Play Store?
+12. **Timeline and distribution:** a sideloaded APK for friends, closed testing,
+    the public Play Store, other stores (Galaxy Store, Huawei AppGallery, F-Droid),
+    or an internal organization app? Note that a new personal Play account needs a
+    closed test before production (see versions.md).
+13. **Payments:** free, ads, one-time unlock, subscription? Which payment methods do
+    the users actually have (cards, local wallets like bKash/Nagad, carrier
+    billing)? Digital goods sold inside the app must use Play Billing / App Store
+    IAP.
 
 ## Round 4: taste (can come after research)
 
-13. Apps they love using, and why.
-14. Feel: calm, playful, premium, cultural or local, minimal, bold?
-15. Anything they definitely don't want.
+14. Apps they love using, and why.
+15. Feel: calm, playful, premium, cultural or local, minimal, bold?
+16. Anything they definitely don't want.
 
 ## Brief template: `docs/app-brief/01-brief.md`
 
@@ -54,6 +60,8 @@ Offer options when you can guess likely answers, so the user can just tap one.
 - Single or multi-user: (accounts, social features)
 - Platforms:
 - Constraints: (budget, data sensitivity, existing assets, deadline)
+- Distribution & payments: (stores, release target, money model, payment methods)
+- Languages: (UI languages, scripts, number/date formats)
 - Success looks like: (3 measurable signs)
 - Out of scope for v1:
 - Open questions:

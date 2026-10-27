@@ -1,14 +1,20 @@
 # Pitfalls learned by trial and error
 
 Each rule here cost real debugging time. Format: the rule, then **Why:** with the
-symptom. Add new ones through the learning loop in SKILL.md. Keep them general:
-describe the trap, not the project.
+symptom, then *(found month year)*. A tag such as `[Firebase]`, `[Cloudflare]` or
+`[Expo]` marks rules that only apply to that stack; untagged rules apply to every
+Capacitor app. Add new ones through the learning loop in SKILL.md. Keep them
+general: describe the trap, not the project. Keep this file under about 250 lines,
+and prune rules that no longer apply.
+
+Rules below without a date were found in Oct 2026 (Capacitor 8, AGP 8.13,
+Android 14–16).
 
 ## Build, CI, deploy
 
 - **Keep one package manager and one lockfile.** **Why:** a stray `bun.lock` next
   to `package-lock.json` made Cloudflare Pages use the wrong installer.
-- **Keep Cloudflare Pages and Workers configs in separate files.** **Why:** one
+- `[Cloudflare]` **Keep Cloudflare Pages and Workers configs in separate files.** **Why:** one
   shared `wrangler.jsonc` failed Pages validation.
 - **Match CI Node/JDK versions to the framework's minimums.** **Why:** Capacitor 8
   failed on an older Node runner.
@@ -33,7 +39,7 @@ describe the trap, not the project.
 - **Android WebView reports `navigator.onLine === true` even with no network.**
   In `MainActivity`, watch the default network with `ConnectivityManager` and call
   `webView.setNetworkAvailable(...)` (which also fires `online`/`offline`
-  events). **Why:** offline mode never turned on; reads waited on the network
+  events). Copy `templates/android/MainActivity.java`. **Why:** offline mode never turned on; reads waited on the network
   instead of the cache.
 - **When the shell redirects to a live URL, do it only inside the native app.**
   **Why:** the Vite dev server served the shell's `index.html`, so `localhost`
@@ -66,10 +72,13 @@ describe the trap, not the project.
 
 ## Offline-first
 
+The full pattern is in [offline.md](offline.md). These are the traps that were
+actually hit:
+
 - **Writes must not wait for server confirmation.** Settle when queued (or after
   a short timeout); still show online rejections. **Why:** saves hung forever
   while offline.
-- **Firestore: enable the persistent (IndexedDB) cache**, and read from the cache
+- `[Firebase]` **Firestore: enable the persistent (IndexedDB) cache**, and read from the cache
   when offline. **Why:** otherwise data disappears offline and queued writes are
   lost on restart.
 - **React Query: `networkMode: 'offlineFirst'`.** **Why:** the default pauses
@@ -86,10 +95,11 @@ describe the trap, not the project.
 
 - **Clear every per-user cache and timer on sign-out; key local caches by user
   ID.** **Why:** the next account saw the previous user's profile and timer.
-- **Firestore batches cap at 500 writes; split bulk deletes into chunks.** **Why:**
+- `[Firebase]` **Firestore batches cap at 500 writes; split bulk deletes into chunks.** **Why:**
   "reset data" failed for active users.
 - **Re-authenticate before password, email or account-deletion changes.** **Why:**
-  Firebase rejects them with `requires-recent-login`.
+  Firebase rejects them with `requires-recent-login` (other auth providers have
+  similar rules).
 - **Store numbers as numbers; save every profile field through one update path.**
   **Why:** a weekly target saved as a string broke the goal maths, and some fields
   never saved.
@@ -103,7 +113,8 @@ describe the trap, not the project.
 
 ## UI
 
-- **Check contrast in every theme combination, not just the default.** **Why:**
+- **Check contrast in every theme combination, not just the default** (run
+  `scripts/check-contrast.mjs`). **Why:**
   secondary labels failed AA in one theme only.
 - **Check 360 px width.** **Why:** the most common budget Android width;
   overflow there goes unnoticed on desktop.

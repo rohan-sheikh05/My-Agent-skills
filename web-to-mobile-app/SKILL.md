@@ -1,118 +1,136 @@
 ---
 name: web-to-mobile-app
-description: End-to-end playbook for building a mobile app (Android, optionally iOS) with a web stack — React, Next.js, Vite, TanStack, Vue, Svelte, Node.js backends — packaged with Capacitor. Covers discovery questions, niche and competitor research, design direction, which other skills to bring in (logo, UI/UX, frontend design, motion), the standard features every app needs (auth, profile with customizable avatars, settings, offline, notifications), release signing and the pitfalls learned by trial and error. Use whenever the user asks to make, start, plan or substantially extend a mobile app built from web technologies, or to turn a website or web app into an Android/iOS app. Not for Kotlin/Swift native or Flutter apps.
+description: End-to-end playbook for building a mobile app (Android first, optionally iOS) with a JavaScript/TypeScript web stack — React, Next.js, Vite, TanStack, Vue, Svelte, Node.js backends — packaged with Capacitor by default, or Expo/React Native for heavy apps. Covers discovery questions, niche and competitor research, design direction, which other skills to bring in (logo, UI/UX, frontend design, motion), the standard features every app needs (light/dark mode plus multiple themes, profile with customizable avatars, offline, notifications), security and performance, ready-made templates (CI signing, Android fixes, service worker, theme tokens, contrast checker), release, and pitfalls learned by trial and error. Use whenever the user asks to make, start, plan or substantially extend a mobile app built with web technologies, or to turn a website or web app into an Android/iOS app. Not for apps written fully natively (Kotlin/Swift) or in Flutter; small native plugins inside a web-stack app are fine.
 ---
 
 # Web stack → mobile app playbook
 
 A good app is built for one specific user with a specific problem. Most of the
-quality comes from the phases *before* code. Don't skip ahead to coding, even when
-the user is eager. Keep each phase short, but do every one.
+quality comes from the phases *before* code. Small native pieces (a Capacitor
+plugin in Java/Kotlin) are allowed when a feature needs them; copy the templates
+instead of writing them from scratch.
 
-Work through the phases in order. Each phase ends with a **gate**: show the user
-what you produced and get their confirmation before moving on. Keep the phase
-outputs in `docs/app-brief/` in the project, so later sessions (and other agents)
-can pick up where you left off.
+## Pick the lane first
 
-| Phase | Output | Reference |
+| Lane | When | What to do |
 |---|---|---|
-| 1. Discovery | `docs/app-brief/01-brief.md` | [references/discovery.md](references/discovery.md) |
-| 2. Niche research | `docs/app-brief/02-research.md` | [references/research.md](references/research.md) |
-| 3. Product & design direction | `docs/app-brief/03-direction.md` | [references/design-direction.md](references/design-direction.md) |
-| 4. Skill plan | section in `03-direction.md` | [references/skill-orchestration.md](references/skill-orchestration.md) |
-| 5. Architecture & setup | working shell on a phone | [references/stack.md](references/stack.md) |
-| 6. Build | features in vertical slices | [references/standard-features.md](references/standard-features.md) |
-| 7. Verify | checklist passed | [references/quality-gates.md](references/quality-gates.md) |
-| 8. Release | signed AAB, store listing | [references/release.md](references/release.md) |
-| Always | avoid known traps | [references/pitfalls.md](references/pitfalls.md) |
+| **Full** | A new app, or turning a website into an app | All phases below, in order |
+| **Extend** | An existing app gets a substantial new feature | Read `docs/app-brief/` (or reconstruct a short brief from the code and confirm it), then phases 3 → 6–7 for that feature |
+| **Quick** | A small change: one screen, a fix, a tweak | Skip the phases. Follow the standard features, the pitfalls and the quality gates that apply |
 
-If the user is extending an existing app instead of starting one, read the existing
-`docs/app-brief/` (or reconstruct a short brief from the code and ask the user to
-confirm it). Then jump to the phase that fits.
+**Unattended mode:** if the user says "just build it", "don't ask me" or is
+clearly away, don't stop at gates. Choose sensible defaults, record every
+assumption in `docs/app-brief/assumptions.md`, and list them in the final report
+so the user can overrule them. Always stop and ask before anything irreversible:
+the app ID, the signing key, publishing, payments, deleting data.
 
-## Phase 1: Discovery (always ask first)
+## Phases (full lane)
 
-Before any research or code, ask the user the core questions in
-[references/discovery.md](references/discovery.md): what the app is, its goal, the
-problem it solves, who the users are, what success looks like, and the
-constraints. Ask at most 4 questions at a time and offer likely answers as options.
-Don't invent answers. If the user says "you decide", propose a choice and get it
-confirmed. Write the brief and confirm it. **Gate.**
+Each phase ends with a **gate**: show the result and get the user's OK before
+moving on. Save the outputs in `docs/app-brief/` in the project so later
+sessions can continue.
 
-## Phase 2: Niche research
+| Phase | Output | Read |
+|---|---|---|
+| 1. Discovery | `01-brief.md` | [discovery.md](references/discovery.md) |
+| 2. Niche research | `02-research.md` | [research.md](references/research.md) |
+| 3. Product & design direction | `03-direction.md` | [design-direction.md](references/design-direction.md) |
+| 4. Skill plan | section in `03-direction.md` | [skill-orchestration.md](references/skill-orchestration.md) |
+| 5. Stack & setup | shell running on a phone | [stack.md](references/stack.md) (or [expo.md](references/expo.md)) |
+| 6. Build | features in vertical slices | [standard-features.md](references/standard-features.md) |
+| 7. Verify | gates passed with real output | [quality-gates.md](references/quality-gates.md) |
+| 8. Release | signed AAB, store listing | [release.md](references/release.md) |
 
-Research the app's category broadly and in depth: successful apps in the niche,
-what users praise and complain about in reviews, onboarding and retention patterns,
-monetization, and what's missing. Follow the method and output template in
-[references/research.md](references/research.md). Cite sources. For broad research,
-run several searches in parallel (or use subagents when they're available), and
-check the claims that matter most against a second source. **Gate:** present
-the 5–10 findings that will most change how the app is built.
+1. **Discovery:** before any research or code, ask what the app is, its goal,
+   the problem it solves, who the users are and the constraints. Ask at most 4
+   questions at a time and offer likely answers. Never invent answers.
+2. **Niche research:** successful apps in the category, what reviews praise and
+   complain about, communities, patterns, monetization, local context. End with
+   the 5–10 implications that most change how the app is built. Cite sources.
+3. **Direction:** core loop, MVP features (and what's left out), navigation, 2–3
+   visual directions for the user to pick from. Gate only the direction itself and
+   the first real screens; don't make the user approve every token.
+4. **Skill plan:** check which skills this session has, and assign each job
+   (logo, tokens, screens, charts, motion, store graphics) to one. Do the job
+   manually if no fitting skill exists.
+5. **Stack:** Capacitor by default. **For heavy apps** (gesture-heavy animation,
+   maps/camera/AR as the core, huge feeds, heavy background work, a native look),
+   explain the trade-off and recommend Expo/React Native; the user decides. Get the
+   shell running on a real phone before building features.
+6. **Build** in vertical slices (one complete feature at a time).
+7. **Verify** with `scripts/check.sh` plus the device checks; report real output.
+8. **Release** with signing, version bump and the store checklist.
 
-## Phase 3: Product & design direction
+## Non-negotiable baseline
 
-Turn the brief and research into decisions: the core loop, the MVP feature list
-(and what's deliberately left out), the navigation model, the emotional tone and
-visual direction, and the key screens. Use
-[references/design-direction.md](references/design-direction.md). Present 2–3
-distinct visual directions when the look isn't obvious, and let the user pick.
-**Gate.**
+Every app gets these. They're the user's standing rules, and each has a reason:
 
-## Phase 4: Skill plan
+- **Light and dark mode plus at least 3 theme styles in Settings.** People use
+  phones in very different light and have strong taste; themes are cheap when
+  everything uses tokens. Details: "Themes" in
+  [standard-features.md](references/standard-features.md). This is the single
+  source of truth for the rule.
+- **Multi-user apps get a profile with customizable illustrated avatars** (plus
+  an optional photo upload), because identity makes shared spaces feel personal.
+  The same file has details.
+- **Offline-first data** ([offline.md](references/offline.md)), because mobile
+  connections drop.
+- **Security, performance, crash reporting and a force-update check**
+  ([engineering.md](references/engineering.md)).
+- **Accessibility:** WCAG AA contrast in every theme, 44 px touch targets,
+  reduced motion.
 
-List the skills available in this session, and decide which one handles which
-part of the app and in what order, using
-[references/skill-orchestration.md](references/skill-orchestration.md). Write the
-plan into `03-direction.md`, so it's explicit which skill owns the logo, the
-design tokens, each screen's UI, motion, and so on. Load each skill when its step
-begins, not all at once.
+## Read before you touch…
 
-## Phase 5–6: Architecture and build
+| Doing this | Read first |
+|---|---|
+| Native code, plugins, the manifest, notifications, background work | [pitfalls.md](references/pitfalls.md) (WebView, Background sections) + `templates/android/` |
+| Offline, sync, caching | [offline.md](references/offline.md) |
+| CI, signing, Gradle, versions | [release.md](references/release.md), [versions.md](references/versions.md), `templates/ci/` |
+| Themes and tokens | [standard-features.md](references/standard-features.md), `templates/web/theme-tokens.css`, `scripts/check-contrast.mjs` |
+| Auth, accounts, uploads, rules | [standard-features.md](references/standard-features.md), [engineering.md](references/engineering.md), [pitfalls.md](references/pitfalls.md) (Data & auth) |
 
-Choose the stack with [references/stack.md](references/stack.md). Get a minimal
-shell running **on a real phone** early, before building features: the signed
-debug build, splash, status bar and safe areas. Then build in vertical slices
-(one complete feature at a time, usable end to end).
+## Templates and scripts
 
-Every app gets the baseline in
-[references/standard-features.md](references/standard-features.md) where it applies.
-For example, **any app with user accounts gets a profile section with
-customizable avatars** (an illustrated set plus an optional photo upload), account
-deletion, sign-out that clears all per-user data, settings, empty states and an
-offline mode. **Every app always gets light and dark mode plus multiple themes
-(at least 3 styles) selectable in Settings.** This rule has no exceptions.
+- `templates/android/MainActivity.java`: reports the real network state to the
+  WebView (the offline fix).
+- `templates/android/NativeSettingsPlugin.java` + `templates/web/native-settings.ts`:
+  status of and shortcuts to notification, exact-alarm and battery settings.
+- `templates/android/signing.gradle` + `templates/ci/build-android.yml`: signed
+  APK/AAB in GitHub Actions; fails without the release key.
+- `templates/web/build-sw.mjs` + `sw-template.js`: precaching service worker for
+  remote-URL or PWA builds.
+- `templates/web/theme-tokens.css`: a styles × modes token starter.
+- `scripts/check-contrast.mjs <tokens.css>`: WCAG check for every style × mode.
+- `scripts/check.sh [tokens.css]`: typecheck, lint, tests, build, audit, contrast.
 
-Read [references/pitfalls.md](references/pitfalls.md) before touching native code,
-notifications, background work, offline sync, CI or signing. Each of those traps
-already cost real debugging time.
-
-## Phase 7–8: Verify and release
-
-Don't call a feature done until it passes
-[references/quality-gates.md](references/quality-gates.md): accessibility in every
-theme, a 360 px layout check, real-device tests for offline, notifications and
-background behavior, and multi-account tests for shared features. Release with
-[references/release.md](references/release.md).
+Replace `com.example.app` and `APP_NAME` placeholders, and adapt rather than
+paste blindly.
 
 ## Working rules
 
-- Explain **why** in commit messages. Bump the native version in the same commit
-  as any native change.
-- Report honestly: say what you verified on a device, what you only verified in a
-  browser, and what you didn't test.
-- Ask before decisions that are expensive to reverse: backend choice, app ID /
-  package name, the signing key, store listing text, pricing.
-- Keep `docs/app-brief/` and a design-system doc (`design-system/MASTER.md`) up to
-  date when decisions change.
+- Commit messages explain **why**. Bump the native version in the same commit as
+  any native change.
+- Report honestly: what ran on a device, what only in a browser, what wasn't tested.
+  Include the real command output for automated checks.
+- Ask before decisions that are expensive to reverse: backend, app ID / package
+  name, signing key, store listing text, pricing.
+- Keep `docs/app-brief/` and `design-system/MASTER.md` up to date when decisions
+  change.
+- Version-sensitive facts live in [versions.md](references/versions.md). Look
+  them up again before relying on them.
 
 ## Learning loop
 
-This skill improves through trial and error. At the end of a session where
-something went wrong, the user corrected you, or a non-obvious fix was found:
+The skill improves through trial and error. When something went wrong, the user
+corrected you, or a non-obvious fix was found:
 
 1. Propose the lesson in one or two lines: the rule, then **Why:** with the
-   symptom you saw.
+   symptom. Tag it with the stack it applies to if it isn't universal
+   (`[Firebase]`, `[Cloudflare]`, `[Expo]`).
 2. When the user approves, add it to the right section of
-   [references/pitfalls.md](references/pitfalls.md) (or the relevant reference
-   file). Keep it general: describe the trap, not the project.
-3. Edit or remove rules that turn out to be wrong instead of piling up exceptions.
+   [pitfalls.md](references/pitfalls.md) (or the relevant reference) with the
+   month it was found.
+3. Keep pitfalls.md under about 250 lines. When it grows past that, merge
+   duplicates, delete rules that no longer apply (e.g. fixed upstream), and
+   consider splitting it by topic.

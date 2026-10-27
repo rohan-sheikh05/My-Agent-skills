@@ -27,25 +27,28 @@ Turn the brief and research into decisions the build can follow.
 - When the direction isn't obvious, offer **2–3 distinct directions** (name,
   mood, palette, type pairing, one signature detail) and let the user choose. A
   quick mockup of one key screen per direction helps.
-- **Themes are mandatory (style × mode).** Every app ships with light *and* dark
-  mode (plus "follow system", which is the default), **and** multiple theme styles
-  (at least 3) that the user picks in Settings. Each style is a full token set
-  (palette, and optionally fonts, radius and signature details) with its own light
-  and dark variant. Make the chosen visual direction the default style, and let the
-  other directions from this phase become the alternative styles. See "Themes" in
-  [standard-features.md](standard-features.md).
+- **Themes** (light/dark + at least 3 styles) are part of the baseline; the rule
+  is defined in "Themes" in [standard-features.md](standard-features.md). Here you
+  only decide the styles: the chosen direction becomes the default style, and the
+  runner-up directions become the alternative styles, **as token sets only**
+  (palette, radius, maybe fonts). Layouts and components stay shared, so no style
+  turns into a half-finished second design.
 - Choose a **signature detail**: one memorable motif, used consistently (e.g. a
   stitch/ink motif, a mascot, a shape language). This is what makes an app feel
-  designed rather than templated.
+  designed rather than templated. It either works in every style, or has a small
+  variant per style (e.g. stitches in one style, petals in another, a plain ring in
+  the neutral one). Never leave a style with a detail that clashes.
 
 ## Design system before screens
 
-Build in phases, and gate each one:
+Build in this order. **Gate only steps 1 and 3** (the tokens/direction, and the
+first two or three real screens on a phone); the rest follows from them:
 
 1. **Tokens:** color (with semantic success/warning/info/danger, plus chart
    colors), type scale and fonts (self-hosted, with the needed script coverage),
-   radius, spacing, elevation, motion timing. Check WCAG AA contrast for every
-   theme combination.
+   radius, spacing, elevation, motion timing. Start from
+   `templates/web/theme-tokens.css` and run `scripts/check-contrast.mjs` until
+   every style × mode passes.
 2. **App shell:** navigation, top bar, safe areas, route loading skeletons.
 3. **Pages:** redesign or build each page with shared primitives.
 4. **Native feel:** status bar and splash follow the theme, haptics, transitions,

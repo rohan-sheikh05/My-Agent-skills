@@ -1,0 +1,48 @@
+// Template: release signing for android/app/build.gradle (Capacitor project).
+// Merge these pieces into the existing file; don't replace the file.
+// CI passes the keystore through environment variables (GitHub secrets, see
+// templates/ci/build-android.yml); local builds use android/keystore.properties:
+//
+//   storeFile=/absolute/path/to/release.jks
+//   storePassword=...
+//   keyAlias=...
+//   keyPassword=...
+//
+// Add keystore.properties and *.jks to .gitignore. Never commit either.
+
+// 1. Top of the file, after `apply plugin: 'com.android.application'`:
+def keystoreProps = new Properties()
+def keystorePropsFile = rootProject.file('keystore.properties')
+if (keystorePropsFile.exists()) {
+    keystorePropsFile.withInputStream { keystoreProps.load(it) }
+}
+def signingValue = { String env, String prop -> System.getenv(env) ?: keystoreProps.getProperty(prop) }
+def releaseStoreFile = signingValue('ANDROID_KEYSTORE_PATH', 'storeFile')
+
+android {
+    defaultConfig {
+        // 2. Bump both on every release that changes native code, plugins, permissions,
+        //    icons, splash or the manifest. versionCode must always increase.
+        versionCode 1
+        versionName "1.0"
+    }
+
+    // 3. Inside android { }:
+    signingConfigs {
+        release {
+            if (releaseStoreFile) {
+                storeFile file(releaseStoreFile)
+                storePassword signingValue('ANDROID_KEYSTORE_PASSWORD', 'storePassword')
+                keyAlias signingValue('ANDROID_KEY_ALIAS', 'keyAlias')
+                keyPassword signingValue('ANDROID_KEY_PASSWORD', 'keyPassword')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (releaseStoreFile) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+}

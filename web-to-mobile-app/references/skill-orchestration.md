@@ -3,7 +3,10 @@
 Different skills are installed in different sessions, so first **check the
 session's skill list** and match by purpose, not by exact name. Load a skill
 only when its step starts. Note in the plan which skills were missing and what
-you'll do instead.
+you'll do instead. **No skill for a job never means skipping the job:** do it
+manually with the guidance in these references (e.g. review the diff yourself if
+there's no `code-review` skill, or launch the app with the project's own dev
+commands if there's no `run` skill).
 
 ## Matching skills to jobs
 
