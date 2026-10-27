@@ -1,0 +1,98 @@
+# My Agent Skills
+
+AI agent skills by **Rohan Sheikh** (BUET). Each skill is a folder of
+instructions an AI follows for a specific kind of job. They're written for Claude,
+and they work with any AI that can read files.
+
+---
+
+## Skills in this repo
+
+| Skill | What it does |
+|---|---|
+| [`web-to-mobile-app`](web-to-mobile-app/) | Builds Android/iOS apps from a web stack (React, Next.js, Vite, Vue, Svelte, Node.js) with Capacitor, from the first idea to a signed Play Store release |
+| `Organized-question-bank-generation-skill-main.zip` | Turns past term-final question papers into a single-file HTML question bank with topic analysis, heatmaps and repeat detection (see the README inside the zip) |
+
+---
+
+## web-to-mobile-app
+
+A step-by-step playbook so the AI builds an app the way an experienced team
+would, instead of jumping straight into code.
+
+### How it works
+
+The AI goes through 8 phases and stops after each one for your approval:
+
+1. **Discovery:** asks what the app is, its goal, the problem it solves and who
+   it's for.
+2. **Niche research:** studies successful apps in the category, their user
+   reviews, communities and patterns, then lists what that means for your app.
+3. **Product & design direction:** the core loop, the MVP features and 2–3
+   visual directions for you to choose from.
+4. **Skill plan:** decides which other skills (logo design, UI/UX, frontend
+   design, charts, motion) handle which part of the app.
+5. **Architecture & setup:** stack and backend choice, the Capacitor shell
+   running on a real phone early.
+6. **Build:** one complete feature at a time.
+7. **Quality gates:** accessibility in every theme, a 360 px layout check,
+   offline and notification tests on a real device, multi-account tests.
+8. **Release:** signing, versioning, GitHub Actions CI, a Play Store checklist.
+
+### Built-in rules
+
+- Every app gets **light and dark mode plus at least 3 themes** in Settings.
+- Multi-user apps get a **profile with customizable avatars** (an illustrated set
+  plus photo upload), account deletion, and a sign-out that clears all user data.
+- Offline-first by default: cached data, queued saves, a sync indicator.
+- A **pitfalls list** learned by trial and error on real apps: WebView offline
+  detection, Android background alarms and battery limits, release signing,
+  Gradle upgrades, Firestore limits and more. It grows with every project.
+
+### Files
+
+| File | Contents |
+|---|---|
+| `SKILL.md` | The workflow and rules (start here) |
+| `references/discovery.md` | Questions to ask and the brief template |
+| `references/research.md` | How to research the app's niche |
+| `references/design-direction.md` | Turning research into product and design decisions |
+| `references/skill-orchestration.md` | Which skill to use for which job |
+| `references/stack.md` | Stack choices and Capacitor setup |
+| `references/standard-features.md` | Features every app should have |
+| `references/quality-gates.md` | Checklists before calling a feature done |
+| `references/release.md` | Signing, versioning, CI, Play Store |
+| `references/pitfalls.md` | Mistakes already made, so they aren't repeated |
+
+---
+
+## How to install
+
+### Claude Code
+
+Copy the skill folder into your skills directory:
+
+```bash
+git clone https://github.com/rohan-sheikh05/My-Agent-skills.git
+cp -r My-Agent-skills/web-to-mobile-app ~/.claude/skills/
+```
+
+On Windows the folder is `C:\Users\<you>\.claude\skills\`. Start a new session,
+then ask something like *"Make a habit tracker app with React"*.
+
+### Claude (claude.ai)
+
+1. Zip the `web-to-mobile-app` folder (the zip should contain the folder itself).
+2. Go to **Settings → Capabilities → Skills** (or **Customize** in the left
+   panel) and upload the zip.
+
+### Other AIs (ChatGPT, Gemini, …)
+
+Upload `SKILL.md` and the `references/` files to a chat or project, and ask the
+AI to follow `SKILL.md`.
+
+---
+
+## License
+
+[MIT](LICENSE)
