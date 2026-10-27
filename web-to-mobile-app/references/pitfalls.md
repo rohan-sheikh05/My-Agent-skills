@@ -118,3 +118,29 @@ actually hit:
   secondary labels failed AA in one theme only.
 - **Check 360 px width.** **Why:** the most common budget Android width;
   overflow there goes unnoticed on desktop.
+- **Draw avatars with real detail, not basic shapes.** Use soft shading, a light
+  spot (catchlight) in the eyes, noses, ears, and eyebrows that match the hair.
+  Add highlights on hair, glasses and skins, plus small niche details (e.g. a
+  pencil behind the ear for a study app). **Why:** a first set made of flat
+  circles and dot eyes looked cheap next to the rest of the app and had to be
+  redrawn.
+- **Pick avatar backgrounds by measured contrast with the figure.** List each
+  avatar's outline colors (skin, hair, clothes, fur). Offer only backgrounds whose
+  color difference from all of them is ≥ 35 (CIE76 ΔE in Lab). Re-filter whenever
+  the user recolors a part. **Why:** backgrounds picked one by one by eye matched
+  their figure (white cat on pale mint, corn on pale yellow), so the avatar
+  disappeared.
+- **Shade illustrations with translucent overlays, not darker hand-picked
+  colors.** Use black or white at 6–25 % opacity over flat fills. **Why:** then
+  shirts, hair or fur take any user-chosen color and keep their folds and
+  highlights, so a color option costs no extra drawing.
+- **Check avatars and icons at the sizes the app really uses** (e.g. 32 px in a
+  menu, 40 px in lists, 64 px on the profile). **Why:** figures that looked fine
+  at 120 px became unreadable at 32 px. Framing people closer (cropped at the
+  shoulders, ~15 % zoom) fixed it.
+- **Don't put a subtitle under a title when it only restates the title.** Text
+  under a page, section or dialog title must carry live data (counts, totals), a
+  warning or consequence, a permission explanation, or empty-state guidance.
+  **Why:** lines like "Your profile and app preferences" under Settings were
+  noise. They pushed content down on phones, and the user had them removed
+  everywhere.

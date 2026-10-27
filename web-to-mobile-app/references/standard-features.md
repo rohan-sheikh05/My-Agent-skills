@@ -19,6 +19,14 @@ otherwise.
       If time is short, start with 6–9 and add more later. A procedural generator
       (e.g. DiceBear) is an acceptable fallback; check the license of the specific
       style, since they vary.
+      Draw them with real detail (shading, catchlights, ears and noses, hair
+      highlights, niche props), never flat basic shapes. Show the set to the user
+      in a preview (before/after, live color controls) before it goes into the app.
+    - **Color options on top of the faces:** a background color for every avatar
+      and a clothing color for people, so one face gives many looks. Only offer
+      backgrounds that contrast with the figure (see `pitfalls.md` › UI). Store
+      the choice in the avatar value (e.g. `person-glasses~butter~navy`), so older
+      app versions can still read the id and fall back to the defaults.
     - **An optional photo upload** with cropping. Resize on the device (e.g.
       512 px), **strip EXIF** (it can contain the location), cap the size in the
       storage rules (not only in the UI), allow image types only, and only let
