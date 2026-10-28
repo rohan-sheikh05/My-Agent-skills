@@ -34,6 +34,19 @@ already expect (the baseline), what they love (what to do well), what they hate
   sources.
 - Check the claims that drive major decisions against a second source.
   Third-party star or download counts are approximate.
+- **Verify policy and payment facts on the primary page**: the store's policy
+  page for restricted permissions (SMS, call log, accessibility, background
+  location), the store's list of payment methods per country, and the
+  competitor's own listing for its features. These decide what can be built and
+  how it earns money. For example, Google Play in some countries accepts cards
+  only, while the audience pays with mobile wallets, so in-app purchases
+  barely work there.
+- **Label weak evidence.** Local forums and Facebook groups are often
+  unreachable to tools. When a finding rests on news, a competitor's blog or a
+  roundup instead, say so next to it.
+- **End with what is still unverified** and what the user must supply (for
+  example, real sample messages for a parsing feature), instead of building on
+  a guessed format.
 - Don't spend more than about 15–20 minutes of tool time unless the user asks for
   a deep dive.
 

@@ -24,6 +24,15 @@ assumption in `docs/app-brief/assumptions.md`, and list them in the final report
 so the user can overrule them. Always stop and ask before anything irreversible:
 the app ID, the signing key, publishing, payments, deleting data.
 
+Unattended mode only changes the **gates**, never which phases run. Discovery
+answers can be assumed and logged, but research, direction and the skill plan
+still happen, with their output files, before any code. An existing website is
+not a brief: turning it into an app is the full lane. Never report "followed the
+skill" when a phase was skipped; say which one and why. **Why:** an overnight
+build that jumped straight to code produced a polished but generic app. The
+research done afterwards showed it missed the features its real users needed
+most, and much of the work had to be re-planned.
+
 ## Phases (full lane)
 
 Each phase ends with a **gate**: show the result and get the user's OK before

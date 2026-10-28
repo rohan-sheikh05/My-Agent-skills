@@ -22,6 +22,21 @@ Android 14–16).
   AGP together.** **Why:** Android Studio silently moved the Gradle wrapper to 9.x
   inside an unrelated commit. Gradle 9.6+ removed an API that AGP 8.x uses, and
   CI broke.
+- **Android resource XML comments can't contain `--`.** **Why:** a comment like
+  `<!-- light -- dark -->` in `colors.xml` failed the resource merge with an
+  unclear error.
+- **Exclude `android/`, `ios/` and other generated folders from ESLint and
+  Prettier.** **Why:** `eslint .` crawled the Gradle build output and the
+  lint step seemed to hang.
+- **On Windows, add `.gitattributes` with `gradlew text eol=lf`, and write
+  `sdk.dir` in `local.properties` with forward slashes.** **Why:** a CRLF
+  `gradlew` fails on Linux CI, and unescaped backslashes in `sdk.dir` broke the
+  build.
+- **When renaming an app, keep existing storage keys and check that the new name
+  is free first** (Play search, domains, the web). The app ID can't change after
+  the first Play upload, so confirm it with the user before that. **Why:**
+  renaming `localStorage`/Preferences keys silently resets every existing
+  user's settings.
 - **Finish backend migrations completely** (client, packages, env, migrations,
   old field reads). **Why:** leftovers caused confusing reads from fields that no
   longer existed.
@@ -49,6 +64,9 @@ Android 14–16).
 - **Notification small icons must be white-on-transparent silhouettes** in
   `res/drawable`, configured in the LocalNotifications plugin. **Why:** Android
   showed a generic icon.
+- **Bundle fonts with the app (e.g. `@fontsource`), don't link Google Fonts.**
+  **Why:** the first launch offline showed fallback fonts and the layout
+  shifted once a network came back.
 - **Expect a theme-class hydration warning on `<html>` when a pre-paint script
   sets the theme.** Suppress that one only, and don't hide other hydration errors.
 
@@ -90,6 +108,20 @@ actually hit:
   silently offline.
 - **Test offline on a real device.** **Why:** the WebView `onLine` bug doesn't
   show up in desktop browsers.
+- **In Playwright, simulate offline by blocking only the backend (or emulator
+  ports) and overriding `navigator.onLine`, not with `context.setOffline`.**
+  **Why:** `setOffline` also cut off the Vite dev server, so lazy chunks failed
+  and the page went blank. That failure can't happen in a bundled APK, so the
+  test was measuring the wrong thing.
+- `[Firebase]` **Create default documents (e.g. the profile) only from a
+  server snapshot** (`!snapshot.metadata.fromCache`) that says the document
+  doesn't exist. **Why:** on an offline cold start the cache is empty, and
+  creating "missing" defaults would overwrite the real document when the
+  device syncs.
+- `[Firebase]` **On sign-out, wait for pending writes first (with a timeout)
+  and refuse if they haven't synced, then `terminate`,
+  `clearIndexedDbPersistence` and reload.** **Why:** signing out with queued
+  offline writes discards them, and the next user can see the cached data.
 
 ## Data & auth
 
@@ -105,6 +137,10 @@ actually hit:
   never saved.
 - **Don't silently limit queries** (e.g. "last 30 days") when a screen promises
   full history.
+- **Never put the user's personal email or other private details in public
+  pages** (privacy policy, store listing, about screen). Use the store developer
+  contact the user chooses. **Why:** a generated privacy page published the
+  user's university email.
 - **Ship security rules with the feature, and degrade gracefully until they're
   deployed.** **Why:** without that, a missing rule deployment broke the whole app
   instead of one feature.
@@ -116,6 +152,9 @@ actually hit:
 - **Check contrast in every theme combination, not just the default** (run
   `scripts/check-contrast.mjs`). **Why:**
   secondary labels failed AA in one theme only.
+- **Never hard-code colors in components or charts; use the theme tokens.**
+  **Why:** a chart's `#2563eb` and a logo's fixed navy stayed the same in dark
+  mode and failed contrast there.
 - **Check 360 px width.** **Why:** the most common budget Android width;
   overflow there goes unnoticed on desktop.
 - **Draw avatars with real detail, not basic shapes.** Use soft shading, a light
