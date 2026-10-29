@@ -41,3 +41,23 @@ gate. For example:
 
 Keep the user involved at visual decisions (logo concept, direction, first
 screens). Don't make them review every token.
+
+## Running work in parallel
+
+- **Give each agent its own files** (e.g. avatars → `src/components/app/avatars/`,
+  icons → `src/components/app/icons/`) and wire their output in yourself.
+- **Stage only your own paths when committing** (`git add <paths>`, not
+  `git add -A`). *Why:* `-A` swept an agent's unfinished files into an unrelated
+  commit.
+- **If a specialist agent can't start** (e.g. a plugin agent with no usable
+  tools), give the same brief to a general agent that loads the matching skill;
+  don't skip the work.
+- **An agent cut off by a usage limit can be resumed** with a message; its work so
+  far is kept. Resume it instead of starting over.
+
+## Code that scripts write
+
+Read back any file a script edited before trusting it, especially regexes and
+escapes. *Why:* `\d` passed through a heredoc and a template literal came out as
+`d`, so a backup-restore date check matched nothing and every dated row was
+silently skipped. For exact multi-line or escaped text, use a direct file edit.

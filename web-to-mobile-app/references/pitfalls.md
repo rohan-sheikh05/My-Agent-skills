@@ -144,6 +144,21 @@ actually hit:
 - **Ship security rules with the feature, and degrade gracefully until they're
   deployed.** **Why:** without that, a missing rule deployment broke the whole app
   instead of one feature.
+- **Every new stored field means: update the rules, the rules tests and the backup
+  restore, then tell the user the rules must be deployed again.** **Why:** strict
+  rules (`keys().hasOnly`) on the server refused a new profile name and avatar;
+  the app looked fine locally and failed only against the live project.
+- **Offline-queued writes resolve before the server answers, so "Saved" can be a
+  lie.** For saves the user watches (profile, settings), await the real write
+  with a timeout when online; queue only when offline. **Why:** a toast said
+  "Profile saved" next to "couldn't be saved" when the rules refused it.
+- **Use the phone's local date, never `toISOString().slice(0, 10)`.** **Why:**
+  east of UTC that returns yesterday until the UTC day rolls over (before 6 am in
+  Bangladesh), so new entries got the wrong date.
+- **Build totals and breakdowns from the data, not from today's list of
+  categories/options.** **Why:** spending in retired and deleted categories was
+  counted in the total but missing from the chart, so "biggest category" was
+  wrong.
 - **Use one set of realtime listeners for the whole app,** shared through context.
   **Why:** a listener per component multiplies reads and cost.
 
@@ -182,4 +197,11 @@ actually hit:
   warning or consequence, a permission explanation, or empty-state guidance.
   **Why:** lines like "Your profile and app preferences" under Settings were
   noise. They pushed content down on phones, and the user had them removed
-  everywhere.
+  everywhere. The same applies to field hints, toggle hints and onboarding
+  subtitles ("Shown at the top of the app", "You can type 500+250"): the user had
+  to ask a second time. Default to no text; grep for `description`/`hint`/`help`
+  props before shipping a screen.
+- **Toast libraries (e.g. Sonner) inject unlayered CSS, which beats Tailwind v4's
+  layered utilities.** Use `!` on their class names, and give them a top offset of
+  the safe-area inset plus a gap. **Why:** "use the theme colour" was silently
+  ignored (Undo buttons stayed black) and toasts sat over the status bar.

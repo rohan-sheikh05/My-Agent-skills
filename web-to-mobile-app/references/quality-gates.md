@@ -25,6 +25,24 @@ checks ran on a real device and which only in a browser.
       screens** in the default theme plus one dark theme. Check 44 px touch
       targets, visible focus, labels on icon buttons, and reduced motion.
 - [ ] Safe areas correct (notch, gesture bar, edge-to-edge) on a real phone.
+- [ ] **Tested on the user's phone before saying "done".** Type-checks and builds
+      are not testing. *Why:* the first "finished" build had wrong dates, a wrong
+      chart total and refused saves, all found within an hour on the device.
+      How: `adb install -r`, then `adb forward tcp:9222
+      localabstract:webview_devtools_remote_<pid>` (debug builds) and drive the
+      WebView over the Chrome DevTools Protocol: read console errors, measure
+      layout, run real flows. Use `adb exec-out screencap -p` for screenshots
+      (CDP screenshots can hang on animated pages).
+- [ ] **Sample data goes through the real UI, is labelled, checked and removed.**
+      Prefix notes/names with `TEST`, check totals by hand against the screen,
+      then delete every TEST record and confirm the user's numbers are back.
+- [ ] **Never capture the screen while the user is using the phone.** Check the
+      focused element first; stop and delete any capture that shows a password
+      or private data. *Why:* a screenshot caught the user typing a password.
+- [ ] **Throwaway browsers stay throwaway.** For headless checks use a temp
+      profile with `--inprivate --no-first-run --disable-sync`, and delete it
+      after. *Why:* a fresh Edge profile signed itself in to the user's account
+      and offered to sync their browsing data.
 
 ## Feature-specific
 
